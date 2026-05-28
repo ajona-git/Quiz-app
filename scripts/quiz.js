@@ -1,48 +1,56 @@
-import {questionsBank} from './questions.js'
-console.log(questionsBank);
-let question='';
-let displayQuestions='';
-let option1;
-let option2;
-let option3;
-let option4;
+import {questionsBank} from './questions.js';
+import { answers } from './answers-array.js';
+let questionCounter = 0;
 
-function displayQuestionHTML(){
+const answers=[{
+  id: '1',
+  selectedAnswer: 'Abuja'
+},{
+  id: '2',
+  selectedAnswer:'Flora Shaw'
+}];
 
-  questionsBank.forEach((questionBank)=>{
 
-    question = questionBank.question;
-    console.log(question);
-    option1 = questionBank.answers[0];
-    console.log(option1)
-    option2 = questionBank.answers[1];
-    console.log(option2)
-    option3 = questionBank.answers[2];
-    console.log(option3)
-    option4 = questionBank.answers[3];
-    console.log(option4);
-    
-  })
-
-  displayQuestionHTML=
-  `
+generateQuestionHTML();
+function generateQuestionHTML(){
+ const questionHTML = 
+ `
   <div class="quiz-app">
-      <section class="question-section">
-        <p class="question">${question}</p>
+    <section class="question-section">
+        <p class="question">${questionsBank[questionCounter].question}</p>
       </section>
       <section class="options-section">
-        <p class="option1">${option1}</p>
-        <p class="option2">${option2}</p>
-        <p class="option3">${option3}</p>
-        <p class="option4">${option4}</p>
+        <button class="option1 js-option">${questionsBank[questionCounter].answers[0]}</button>
+        <button class="option2 js-option">${questionsBank[questionCounter].answers[1]}</button>
+        <button class="option3 js-option">${questionsBank[questionCounter].answers[2]}</button>
+        <button class="option4 js-option">${questionsBank[questionCounter].answers[3]}</button>
       </section>
       <section class="previous-next">
-        <button class="previous">Previous</button>
-        <button class="next">Next</button>
-      </section>
-    </div>
-  `
-  document.querySelector('.position-app').innerHTML = displayQuestionHTML
+        <button class="next js-next">Next</button>
+        <button class="previous js-previous">Previous</button>
+     </section>
+  </div>
+ `
+ document.querySelector('.position-app').innerHTML= questionHTML;
+
+ document.querySelector('.js-next').addEventListener('click', ()=>{
+    questionCounter++;
+    if(questionCounter >= questionsBank.length){
+      questionCounter = 0;
+    }
+    console.log(questionCounter);
+    generateQuestionHTML()
+  });
+
+  document.querySelector('.js-previous').addEventListener('click', ()=>{
+    questionCounter--;
+    if(questionCounter < 0 ){
+      questionCounter = questionsBank.length - 1;
+    }
+    generateQuestionHTML()
+  });
+
 }
 
-displayQuestionHTML()
+
+

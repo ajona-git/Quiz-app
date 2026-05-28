@@ -1,16 +1,28 @@
 import {questionsBank} from './questions.js';
-import { answers } from './answers-array.js';
+
 let questionCounter = 0;
 
-const answers=[{
-  id: '1',
-  selectedAnswer: 'Abuja'
-},{
-  id: '2',
-  selectedAnswer:'Flora Shaw'
-}];
+const answers=[];
 
 
+
+function saveAnswer(questionObj , selectedOption){
+  const existingAnswer = answers.find((answerObj)=>{
+    return answerObj.id === questionObj.id
+  });
+  if(existingAnswer){
+    existingAnswer.selectedAnswer = selectedOption
+  } else {
+      answers.push({
+      id: questionObj.id,
+      selectedAnswer: selectedOption
+    });
+
+  }
+
+  console.log(answers);
+
+}
 generateQuestionHTML();
 function generateQuestionHTML(){
  const questionHTML = 
@@ -50,6 +62,12 @@ function generateQuestionHTML(){
     generateQuestionHTML()
   });
 
+  document.querySelectorAll('.js-option').forEach((option)=>{
+  option.addEventListener('click', ()=>{
+    const selectedOption = option.innerText
+    saveAnswer(questionsBank[questionCounter], selectedOption)
+  });
+});
 }
 
 

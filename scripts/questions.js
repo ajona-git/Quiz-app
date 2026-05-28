@@ -15,7 +15,7 @@ export const questionsBank = [{
   correct:'Formula 1',
 },{
   id : '4',
-  question:'What is the name of Max Vestappen current teammate?',
+  question:'What is the name of Max Verstappen current teammate?',
   answers:['Isaac Hadjar','Charles Leclerc','Lando Norris','Olie Bearman'],
   correct:'Isaac Hadjar',
 },{

@@ -25,6 +25,7 @@ function saveAnswer(questionObj , selectedOption){
 }
 generateQuestionHTML();
 function generateQuestionHTML(){
+  const isLastQuestion = questionCounter === questionsBank.length - 1;
  const questionHTML = 
  `
   <div class="quiz-app">
@@ -38,21 +39,36 @@ function generateQuestionHTML(){
         <button class="option4 js-option">${questionsBank[questionCounter].answers[3]}</button>
       </section>
       <section class="previous-next">
-        <button class="next js-next">Next</button>
+      ${isLastQuestion 
+        ? `<button class="submit js-submit">Submit</button>`
+        : `<button class="next js-next">Next</button>`}
         <button class="previous js-previous">Previous</button>
      </section>
   </div>
  `
  document.querySelector('.position-app').innerHTML= questionHTML;
 
- document.querySelector('.js-next').addEventListener('click', ()=>{
+ const nextButton = document.querySelector('.js-next');
+
+ if(nextButton){
+  nextButton.addEventListener('click',()=>{
     questionCounter++;
-    if(questionCounter >= questionsBank.length){
-      questionCounter = 0;
+
+    if(questionCounter >= questionsBank.length ){
+      questioncounter = 0;
     }
-    console.log(questionCounter);
     generateQuestionHTML()
-  });
+    console.log(questionCounter)
+  })
+ }
+ const submitButton = document.querySelector('.js-submit')
+ if(submitButton){
+  submitButton.addEventListener('click',()=>{
+    scoreAnswers();
+  })
+ }
+
+
 
   document.querySelector('.js-previous').addEventListener('click', ()=>{
     questionCounter--;
@@ -62,13 +78,29 @@ function generateQuestionHTML(){
     generateQuestionHTML()
   });
 
-  document.querySelectorAll('.js-option').forEach((option)=>{
-  option.addEventListener('click', ()=>{
-    const selectedOption = option.innerText
-    saveAnswer(questionsBank[questionCounter], selectedOption)
-  });
+  document.querySelector('.options-section').addEventListener('click', (e)=>{
+  if(e.target.classList.contains('js-option')){
+    saveAnswer(questionsBank[questionCounter], e.target.innerText);
+  }
 });
 }
+function scoreAnswers(){
+  let score = 0;
 
+  answers.forEach((answer)=>{
 
+    const correctQuestion = questionsBank.find((question)=>{
+      return question.id === answer.id;
+    });
+
+    if(correctQuestion){
+      if(answer.selectedAnswer === correctQuestion.correct){
+        score++;
+      }
+    }
+
+  });
+
+  console.log(`Your score is ${score}`);
+}
 
